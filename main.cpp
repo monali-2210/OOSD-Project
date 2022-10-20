@@ -5,21 +5,21 @@
 
 using namespace std;
 
-void DisplayMenu();
-int security();
+void DisplayMenu(int);
+int admin_login();
 
 class Main_Manager_Railway{
     public:
         Main_Manager_Railway(){
-            int k = security();
+            int k = admin_login();
             DisplayMenu(k);
         }
 
 };
 
-int security(){
+int admin_login(){
     int i, j = 0;
-    char user_data[8], user_input[8], pwd_data[8], pwd_input[8];
+    string user_data, user_input, pwd_data, pwd_input;
     cout<<"\tPlease enter your credentials below\n";
     cout<<"\t Username : ";
     cin>>user_input;
@@ -27,23 +27,93 @@ int security(){
     cin>>pwd_input;
     ifstream userin;
     ifstream pwdin;
+    pwdin.open("Password.txt", ios::out);
     userin.open("Username.txt", ios::out);
-    pwdin.open("password.txt", ios::out);
     while(! userin.eof()){
-        userin.getline(user_data, 8);
-        pwdin.getline(pwd_data, 8);
-
-        for(int i = 0; user_data[i]!='\0'; i++){
-            if(user_data[i]==user_input[i] && pwd_data[i]==pwd_input[i]){
-
-            }else{
-                cout<<"Username and password didn't match!\n";
-                j++;
-                break;
-            }
-        }
+        getline(pwdin, pwd_data);
+        getline(userin, user_data);
+    }
+    if(user_data == user_input && pwd_data == pwd_input){
+        cout<<"\n\tSuccessfully Logged in!";
+    }
+    else{
+        j++;
+        cout<<"\n\tBad credentials!";
     }
     return j;
+}
+
+int user_check(string user, string pwd){
+    string user_data, pwd_data;
+    ifstream userin;
+    ifstream pwdin;
+    userin.open("user.txt", ios::out);
+    pwdin.open("pass.txt", ios::out);
+    while(!userin.eof()){
+        getline(userin, user_data);
+        getline(pwdin, pwd_data);
+        if(user_data == user && pwd_data == pwd){
+            return 0;
+        }
+        else{
+            
+        }
+    }
+    return 1;
+}
+
+void create_user(){
+    char c = 'y';
+    string user, pwd;
+
+    
+    while(c == 'y' || c == 'Y'){
+        D: cout<<"\nEnter New Username : ";
+           cin>>user;
+           cout<<"\nEnter Password : ";
+           cin>>pwd;
+           if(user_check(user, pwd) != 0){
+                ofstream userout;
+                ofstream pwdout;
+                userout.open("user.txt", ios::app);
+                pwdout.open("pass.txt", ios::app);
+                userout<<"\n"<<user;
+                pwdout<<"\n"<<pwd;
+                cout<<"User added successfully!";
+                userout.close();
+                pwdout.close();
+                cout<<"\nAnother new user(y/n): ";
+                cin>>c;
+           }
+           else{
+                cout<<"\nUsername already exists!"; goto D;
+           }
+    }
+    DisplayMenu(0);
+}
+
+void modify_user(){
+
+}
+
+void show_user(){
+    string user, pwd;
+    int i = 0;
+    ifstream userin;
+    ifstream pwdin;
+    userin.open("user.txt", ios::out);
+    pwdin.open("pass.txt", ios::out);
+    cout<<"\tUSERNAME\tPASSWORD\n";
+    while(!userin.eof()){
+        i++;
+        getline(userin, user);
+        getline(pwdin, pwd);
+        cout<<i<<"\t"<<user<<"\t\t"<<pwd<<endl;
+    }
+}
+
+void delete_user(){
+
 }
 
 void DisplayMenu(int j){
@@ -61,6 +131,7 @@ void DisplayMenu(int j){
                 cout<<"\n\t 3. Show Users";
                 cout<<"\n\t 4. Delete User";
                 cout<<"\n\t 5. Previous Menu";
+                cout<<"\n\t Choose one of the above option : ";
                 cin>>choice;
                 switch(choice){
                     case 1:create_user();
@@ -84,16 +155,17 @@ void DisplayMenu(int j){
                    cout<<"\n\t 3. Show Routes";
                    cout<<"\n\t 4. Delete Routes";
                    cout<<"\n\t 5. Previous Menu";
+                   cout<<"\n\t Choose one of the above option : ";
                    cin>>choice;
                    switch(choice){
-                    case 1:create_new();
-                        break;
-                    case 2:modify_route();
-        				break;
-        			case 3:show_route();
-        				break;
-        			case 4:del_route();
-        				break;
+                    // case 1:create_new();
+                    //     break;
+                    // case 2:modify_route();
+        			// 	break;
+        			// case 3:show_route();
+        			// 	break;
+        			// case 4:del_route();
+        			// 	break;
                     case 5:goto A;
                         break;
                     default: cout<<"Invalid selection! Try again!!";
