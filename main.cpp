@@ -77,6 +77,33 @@ void DisplayMenu(int j){
                             goto B;
                 }
            }
+           else if(choice == 2){
+                choice = 0;
+                C: cout<<"\n\t 1. Create New Route";
+                   cout<<"\n\t 2. Modify Existing Route";
+                   cout<<"\n\t 3. Show Routes";
+                   cout<<"\n\t 4. Delete Routes";
+                   cout<<"\n\t 5. Previous Menu";
+                   cin>>choice;
+                   switch(choice){
+                    case 1:create_new();
+                        break;
+                    case 2:modify_route();
+        				break;
+        			case 3:show_route();
+        				break;
+        			case 4:del_route();
+        				break;
+                    case 5:goto A;
+                        break;
+                    default: cout<<"Invalid selection! Try again!!";
+                             goto C;
+                   }
+           }
+           else{
+                cout<<"Invalid selection! Try again!!";
+                goto A;
+           }
     }
 }
 
